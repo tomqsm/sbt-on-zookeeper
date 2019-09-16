@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: lwbholder.setup
+  cloud:
+    zookeeper:
+      connect-string: jozka.ojejek.com:2181,wera.ojejek.com:2181,zuza.ojejek.com:2181
+      discovery:
+        enabled: true
+        instanceId: ${spring.application.name}
+      config:
+        enabled: true
+        root: config
+        defaultContext: application
