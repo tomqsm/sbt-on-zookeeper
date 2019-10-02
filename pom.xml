@@ -10,15 +10,15 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>setup</module>
-        <module>auth</module>
-        <module>autorization</module>
-        <module>inmemory.service</module>
+        <module>authentication</module>
+        <module>authorization</module>
+        <module>inmemory.service.db</module>
         <module>loaded.service</module>
     </modules>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <mainClass>biz.lwb.holder.setup.Application</mainClass>
         <jdk.version>12</jdk.version>
     </properties>
 
@@ -31,6 +31,7 @@
                 <type>pom</type>
                 <scope>import</scope>
                 <exclusions>
+<!--                exclude to replace with version 3.4.14-->
                     <exclusion>
                         <groupId>org.apache.zookeeper</groupId>
                         <artifactId>zookeeper</artifactId>
@@ -69,11 +70,6 @@
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-zookeeper-config</artifactId>
                 <version>2.1.2.RELEASE</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-feign</artifactId>
-                <version>1.4.7.RELEASE</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
@@ -168,7 +164,6 @@
                     <version>2.1.8.RELEASE</version>
                     <configuration>
                         <mainClass>${mainClass}</mainClass>
-                        <addResources>true</addResources>
                     </configuration>
                     <executions>
                         <execution>
@@ -187,10 +182,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
         </plugins>

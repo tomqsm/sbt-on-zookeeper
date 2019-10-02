@@ -1,6 +1,6 @@
 spring:
   application:
-    name: lwbholder.setup
+    name: lwbholder.auth
   cloud:
     zookeeper:
       connect-string: zoo1.ojejek.com:2181,zoo2.ojejek.com:2181,zoo3.ojejek.com:2181

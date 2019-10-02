@@ -1,3 +1,5 @@
+server:
+  port: 8280
 spring:
   profiles: default
 logging:

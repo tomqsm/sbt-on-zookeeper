@@ -1,0 +1,16 @@
+FROM alpine/git as gitimage1
+RUN pwd
+RUN git clone https://github.com/tomqsm/sbt-on-zookeeper.git
+
+RUN ls /git/sbt-on-zookeeper
+
+FROM maven:3-jdk-8
+
+COPY --from=gitimage1 /git/sbt-on-zookeeper /opt/project
+
+RUN ls /opt
+RUN ls /usr/share
+
+WORKDIR /opt/project/sbt-on-zookeeper
+
+RUN mvn --version
