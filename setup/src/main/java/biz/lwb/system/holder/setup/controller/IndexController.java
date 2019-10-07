@@ -47,9 +47,6 @@ public class IndexController {
     //@Autowired
     //private CuratorFramework curatorFramework;
 
-    @Autowired
-    private Producer producer;
-
     @GetMapping("service")
     public List<FiveResult> getServiceInfo() {
         ServiceLoader<FiveService> load = ServiceLoader.load(FiveService.class);
@@ -63,7 +60,6 @@ public class IndexController {
 
     @GetMapping("service.spring.injection")
     public List<MonitorDto> getServiceSpringInfoInjection(HttpServletRequest httpRequest) {
-        producer.sendMessage(httpRequest.getHeaderNames().toString());
         log.info("Data from database {}", environment.getProperty("springapp.spring.profiles"));
         log.debug("Data from database {}", environment.getProperty("shared"));
         log.info("cloud properties {}", cloudProperties);

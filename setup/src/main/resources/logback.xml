@@ -7,6 +7,7 @@
     </appender>
 
     <logger name="org.springframework" level="INFO" />
+    <logger name="org.springframework.web.filter.CommonsRequestLoggingFilter" level="debug" />
 
     <root level="INFO">
         <appender-ref ref="STDOUT" />
