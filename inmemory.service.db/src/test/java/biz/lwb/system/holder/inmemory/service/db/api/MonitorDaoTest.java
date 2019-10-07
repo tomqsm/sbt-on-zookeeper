@@ -2,6 +2,7 @@ package biz.lwb.system.holder.inmemory.service.db.api;
 
 import biz.lwb.system.holder.inmemory.service.SpringConfig;
 import biz.lwb.system.holder.inmemory.service.db.dto.MonitorDto;
+import biz.lwb.system.holder.inmemory.service.db.mapper.MonitorDao;
 import biz.lwb.system.holder.inmemory.service.db.mapper.MonitorDaoImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +21,7 @@ public class MonitorDaoTest {
 
 
     @Autowired
-    private MonitorDaoImpl repository;
+    private MonitorDao repository;
 
     @Test
     public void fiveTest() {

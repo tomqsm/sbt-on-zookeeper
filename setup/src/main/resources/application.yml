@@ -2,6 +2,11 @@ server:
   port: 8280
 spring:
   profiles: default
+  kafka:
+    producer:
+      bootstrap-servers: kafka1.ojejek.com:9092,kafka2.ojejek.com:9092,kafka3.ojejek.com:9092
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 logging:
   config: classpath:logback.xml
 

@@ -1,6 +1,5 @@
 package biz.lwb.system.holder.inmemory.service.db.mapper;
 
-import biz.lwb.system.holder.inmemory.service.db.mapper.MonitorDao;
 import biz.lwb.system.holder.inmemory.service.db.dto.MonitorDto;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;

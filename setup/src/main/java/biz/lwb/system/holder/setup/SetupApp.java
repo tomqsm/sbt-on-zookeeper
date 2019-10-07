@@ -1,6 +1,6 @@
 package biz.lwb.system.holder.setup;
 
-import biz.lwb.system.holder.inmemory.service.db.api.SpringConfig;
+import biz.lwb.system.holder.inmemory.service.SpringConfig;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;

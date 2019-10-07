@@ -20,7 +20,7 @@
 
         <dependency>
             <groupId>biz.lwb.system</groupId>
-            <artifactId>inmemory.service</artifactId>
+            <artifactId>inmemory.service.db</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
