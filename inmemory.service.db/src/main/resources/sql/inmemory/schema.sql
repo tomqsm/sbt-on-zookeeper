@@ -9,6 +9,7 @@ CREATE TABLE users (
     name    varchar(40),
     surname     varchar(40)
 );
+CREATE INDEX IDX_FNAME ON users(name);
 
 CREATE TABLE roles (
     id        bigint auto_increment primary key,
