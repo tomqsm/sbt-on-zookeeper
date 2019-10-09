@@ -16,6 +16,7 @@ public class Producer {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
+
     public void sendMessage(String message) {
         ListenableFuture<SendResult<String, String>> send = kafkaTemplate.send(TOPIC, message);
         send.addCallback(new ListenableFutureCallback<>() {

@@ -60,6 +60,7 @@ public class IndexController {
 
     @GetMapping("service.spring.injection")
     public List<MonitorDto> getServiceSpringInfoInjection(HttpServletRequest httpRequest) {
+
         log.info("Data from database {}", environment.getProperty("springapp.spring.profiles"));
         log.debug("Data from database {}", environment.getProperty("shared"));
         log.info("cloud properties {}", cloudProperties);
