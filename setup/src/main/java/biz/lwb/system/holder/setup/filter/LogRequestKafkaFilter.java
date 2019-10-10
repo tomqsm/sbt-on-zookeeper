@@ -1,19 +1,19 @@
 package biz.lwb.system.holder.setup.interceptor;
 
-import biz.lwb.system.holder.setup.kafka.Producer;
+import biz.lwb.system.holder.setup.kafka.LogKafkaProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.filter.AbstractRequestLoggingFilter;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class RequestLoggingFilter extends AbstractRequestLoggingFilter {
+public class LogRequestKafkaFilter extends AbstractRequestLoggingFilter {
 
     @Autowired
-    private Producer producer;
+    private LogKafkaProducer logKafkaProducer;
 
     @Override
     protected void beforeRequest(HttpServletRequest request, String message) {
-        producer.sendMessage(this.createMessage(request, "", ""));
+        logKafkaProducer.sendMessage(this.createMessage(request, "", ""));
     }
 
     @Override
