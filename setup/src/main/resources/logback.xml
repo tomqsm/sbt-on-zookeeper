@@ -2,8 +2,33 @@
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%-5level %d{HH:mm:ss.SSS} [%thread]  %class{0}.%M,%L - %msg%n</pattern>
+            <pattern>%-5level|%d{HH:mm:ss.SSS}{CET}|%X{X_CORRELATION}|[%thread]  %class{0}.%M,%L - %msg%n</pattern>
+<!--            <pattern>%-5level %d{HH:mm:ss.SSS} [%thread]  %class{0}.%M,%L - %msg%n</pattern>-->
         </encoder>
+    </appender>
+
+    <!-- This is the kafkaAppender -->
+    <appender name="kafka" class="com.github.danielwegener.logback.kafka.KafkaAppender">
+        <encoder>
+            <pattern>%-5level|%d{HH:mm:ss.SSS}|%X{X_CORRELATION}|[%thread]  %class{0}.%M,%L - %msg%n</pattern>
+        </encoder>
+        <topic>test2</topic>
+        <keyingStrategy class="com.github.danielwegener.logback.kafka.keying.NoKeyKeyingStrategy" />
+        <deliveryStrategy class="com.github.danielwegener.logback.kafka.delivery.AsynchronousDeliveryStrategy" />
+
+        <!-- Optional parameter to use a fixed partition -->
+        <!-- <partition>0</partition> -->
+
+        <!-- Optional parameter to include log timestamps into the kafka message -->
+         <appendTimestamp>true</appendTimestamp>
+
+        <!-- each <producerConfig> translates to regular kafka-client config (format: key=value) -->
+        <!-- producer configs are documented here: https://kafka.apache.org/documentation.html#newproducerconfigs -->
+        <!-- bootstrap.servers is the only mandatory producerConfig -->
+        <producerConfig>bootstrap.servers=kafka1.ojejek.com:9092,kafka2.ojejek.com:9092,kafka3.ojejek.com:9092</producerConfig>
+
+        <!-- this is the fallback appender if kafka is not available. -->
+        <appender-ref ref="STDOUT" />
     </appender>
 
     <logger name="org.springframework" level="INFO" />
@@ -11,6 +36,7 @@
 
     <root level="INFO">
         <appender-ref ref="STDOUT" />
+        <appender-ref ref="kafka" />
     </root>
 
 </configuration>

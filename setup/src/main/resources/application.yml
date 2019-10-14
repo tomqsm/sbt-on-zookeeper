@@ -9,4 +9,7 @@ spring:
 logging:
   config: classpath:logback.xml
 
+correlation_id:
+    header_name: X_CORRELATION
+    mdc_name: ${correlation_id.header_name}
 

@@ -9,11 +9,11 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 
 @Slf4j
 @Service
-public class Producer {
+public class LogKafkaProducer {
     public static final String TOPIC = "test2";
     private final KafkaTemplate<String, String> kafkaTemplate;
 
-    public Producer(KafkaTemplate<String, String> kafkaTemplate){
+    public LogKafkaProducer(KafkaTemplate<String, String> kafkaTemplate){
         this.kafkaTemplate = kafkaTemplate;
     }
 

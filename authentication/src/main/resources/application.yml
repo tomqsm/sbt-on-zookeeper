@@ -4,3 +4,5 @@ spring:
   profiles: default
   logging:
     config: classpath:logback.xml
+jwt:
+  secret: secrethere

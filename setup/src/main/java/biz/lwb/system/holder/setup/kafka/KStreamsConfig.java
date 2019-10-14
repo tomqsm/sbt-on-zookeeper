@@ -14,14 +14,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.KafkaStreamsDefaultConfiguration;
+import org.springframework.kafka.config.KafkaStreamsConfiguration;
 import org.springframework.kafka.config.StreamsBuilderFactoryBean;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import static org.apache.commons.lang.StringUtils.contains;
+
 @Configuration
-public class KafkaLoggingStream {
+public class KStreamsConfig {
 
     @Value("${delivery-stats.stream.threads:1}")
     private int threads;
@@ -59,11 +62,10 @@ public class KafkaLoggingStream {
         config.put(StreamsConfig.COMMIT_INTERVAL_MS_CONFIG, 30000);
         config.put(StreamsConfig.NUM_STREAM_THREADS_CONFIG, threads);
         config.put(StreamsConfig.REPLICATION_FACTOR_CONFIG, replicationFactor);
-        return new StreamsBuilderFactoryBean(config);
+        return new StreamsBuilderFactoryBean(new KafkaStreamsConfiguration(config));
 
     }
 
-    //
     @Bean("app2StreamBuilder")
     public StreamsBuilderFactoryBean app2StreamBuilderFactoryBean() {
         Map<String, Object> config = new HashMap<>();
@@ -73,7 +75,7 @@ public class KafkaLoggingStream {
         config.put(StreamsConfig.COMMIT_INTERVAL_MS_CONFIG, 30000);
         config.put(StreamsConfig.NUM_STREAM_THREADS_CONFIG, threads);
         config.put(StreamsConfig.REPLICATION_FACTOR_CONFIG, replicationFactor);
-        return new StreamsBuilderFactoryBean(config);
+        return new StreamsBuilderFactoryBean(new KafkaStreamsConfiguration(config));
     }
 
     @SuppressWarnings("unchecked")
@@ -81,18 +83,21 @@ public class KafkaLoggingStream {
     public KStream<String, String> startProcessing(@Qualifier("app1StreamBuilder") StreamsBuilder builder) {
 
         KStream<String, String> kStream = builder.stream("test2", Consumed.with(Serdes.String(), Serdes.String()));
+        kStream.selectKey((key, value) -> value.split(" ")[0])
+                .filter((s, s2) -> s2 != null && contains(s2, "ERROR"))
+                .map((key, value) -> {
 
-        kStream.map((key, value) -> {
-            int dummyValue = new Random().nextInt();
-            KeyValue<String, String> pair = new KeyValue<>(key, value);
+                    int dummyValue = new Random().nextInt();
+                    KeyValue<String, String> pair = new KeyValue<>(key, value);
 
-            if (key == null) {
-                pair = KeyValue.pair(dummyValue + key, value);
-            }
+                    if (key == null) {
+                        pair = KeyValue.pair(dummyValue + key, value);
+                    }
 
-            return pair;
-        }).to("subs", Produced.with(Serdes.String(), Serdes.String())); // send downstream to another topic
+                    return KeyValue.pair(key, value);
+                }).to("log-error", Produced.with(Serdes.String(), Serdes.String())); // send downstream to another topic
 
+//        builder.table("log-error")
         return kStream;
     }
 }
