@@ -5,6 +5,7 @@ spring:
   profiles: default
   kafka:
     bootstrap-servers: kafka1.ojejek.com:9092,kafka2.ojejek.com:9092,kafka3.ojejek.com:9092
+    schema-registry-url: http://kafka1.ojejek.com:8081
 
 logging:
   config: classpath:logback.xml

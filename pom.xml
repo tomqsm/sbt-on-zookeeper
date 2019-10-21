@@ -23,6 +23,13 @@
         <mainClass>biz.lwb.system.holder.setup.SetupApp</mainClass>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>confluent</id>
+            <url>http://packages.confluent.io/maven/</url>
+        </repository>
+    </repositories>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -137,6 +144,29 @@
                 <version>2.3.1</version>
             </dependency>
 
+            <!--AVRO-->
+            <dependency>
+                <groupId>org.apache.avro</groupId>
+                <artifactId>avro</artifactId>
+                <version>1.9.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.avro</groupId>
+                <artifactId>avro-compiler</artifactId>
+                <version>1.9.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.avro</groupId>
+                <artifactId>avro-maven-plugin</artifactId>
+                <version>1.9.1</version>
+            </dependency>
+            <dependency>
+                <groupId>io.confluent</groupId>
+                <artifactId>kafka-avro-serializer</artifactId>
+                <version>5.2.1</version>
+            </dependency>
+
+            <!--TESTING-->
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter</artifactId>
@@ -205,6 +235,28 @@
                             <goals>
                                 <goal>repackage</goal>
                             </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+
+                <plugin>
+                    <groupId>org.apache.avro</groupId>
+                    <artifactId>avro-maven-plugin</artifactId>
+                    <version>1.9.1</version>
+                    <executions>
+                        <execution>
+                            <id>schemas</id>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <goal>schema</goal>
+<!--                                <goal>protocol</goal>-->
+<!--                                <goal>idl-protocol</goal>-->
+                            </goals>
+                            <configuration>
+                                <sourceDirectory>${project.basedir}/src/main/resources/avro</sourceDirectory>
+                                <outputDirectory>${project.build.directory}/generated-sources/avro</outputDirectory>
+                            </configuration>
                         </execution>
                     </executions>
                 </plugin>

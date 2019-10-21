@@ -2,16 +2,11 @@ package biz.lwb.system.holder.setup.controller;
 
 import biz.lwb.system.holder.inmemory.service.db.dto.MonitorDto;
 import biz.lwb.system.holder.inmemory.service.db.mapper.MonitorDao;
+import biz.lwb.system.holder.setup.avro.HttpRequestAvro;
+import biz.lwb.system.holder.setup.kafka.KafkaHttpRequestProducer;
 import biz.lwb.system.holder.setup.properties.LadProperties;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.common.serialization.Serdes;
-import org.apache.kafka.streams.KeyValue;
-import org.apache.kafka.streams.StreamsBuilder;
-import org.apache.kafka.streams.kstream.Consumed;
-import org.apache.kafka.streams.kstream.KStream;
-import org.apache.kafka.streams.kstream.Produced;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.zookeeper.serviceregistry.ServiceInstanceRegistration;
@@ -42,6 +37,9 @@ public class IndexController {
     @Autowired
     private ZookeeperServiceRegistry serviceRegistry;
 
+    @Autowired
+    private KafkaHttpRequestProducer kafkaHttpRequestProducer;
+
     @GetMapping("service.spring.injection")
     public List<MonitorDto> getServiceSpringInfoInjection(HttpServletRequest httpRequest) {
 
@@ -57,6 +55,17 @@ public class IndexController {
     public String getdiscovery() {
         registerThings();
         return serviceUrl();
+
+    }
+
+    @GetMapping("kafka")
+    public HttpRequestAvro getKafka() {
+        HttpRequestAvro input = HttpRequestAvro.newBuilder()
+                .setFirst("first " + System.currentTimeMillis())
+                .setSecond("second " + System.currentTimeMillis())
+                .build();
+        kafkaHttpRequestProducer.sendMessage(input);
+        return input;
 
     }
 

@@ -1,0 +1,9 @@
+{
+     "type": "record",
+     "namespace": "biz.lwb.system.holder.setup.avro",
+     "name": "HttpRequestAvro",
+     "fields": [
+       { "name": "first", "type": "string" },
+       { "name": "second", "type": "string" }
+     ]
+}

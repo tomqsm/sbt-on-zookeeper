@@ -1,0 +1,9 @@
+@startuml
+Client -> Gateway: async GET /api/towns
+Gateway -> Kafka: topic api-towns / a2c3s
+Gateway -> TownService: GET /a2c3s
+Kafka <--> TownService: a2c3s
+TownService --> Gateway: Response
+Gateway --> Client
+
+@enduml

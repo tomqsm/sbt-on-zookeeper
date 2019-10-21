@@ -23,7 +23,7 @@ import java.util.Random;
 
 import static org.apache.commons.lang.StringUtils.contains;
 
-@Configuration
+//@Configuration
 public class KStreamsConfig {
 
     @Value("${delivery-stats.stream.threads:1}")
