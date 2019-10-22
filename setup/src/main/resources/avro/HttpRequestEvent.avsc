@@ -1,0 +1,37 @@
+{
+  "type" : "record",
+  "name" : "HttpRequestEvent",
+  "namespace" : "biz.lwb.system.holder.setup.avro",
+  "fields" : [ {
+    "name" : "correlationId",
+    "type" : "string"
+  }, {
+    "name" : "uri",
+    "type" : [ "null", "string" ],
+    "default" : null
+  }, {
+    "name" : "timestamp",
+    "type" : [ "null", {
+      "type" : "int",
+      "logicalType" : "time-millis"
+    } ]
+  }, {
+    "name" : "headers",
+    "type" : {
+      "type" : "map",
+      "values" : {
+        "type" : "array",
+        "items" : "string",
+        "java-class" : "java.util.ArrayList"
+      },
+      "java-key-class" : "java.lang.String"
+    }
+  }, {
+    "name" : "httpMethod",
+    "type" : {
+      "type" : "enum",
+      "name" : "HttpMethod",
+      "symbols" : [ "GET", "POST", "DELETE" ]
+    }
+  } ]
+}

@@ -1,49 +1,60 @@
 package biz.lwb.system.holder.setup.filter;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
-import java.util.*;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.List;
+
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 final class MutableHttpServletRequest extends HttpServletRequestWrapper {
-    // holds custom header and value mapping
-    private final HttpHeaders customHeaders;
 
-    public MutableHttpServletRequest(HttpServletRequest request){
+    private final HttpHeaders customHeaders;
+    private static final String DELIMITER = ",";
+
+    public MutableHttpServletRequest(HttpServletRequest request) {
         super(request);
         this.customHeaders = new HttpHeaders();
     }
 
-    public void putHeader(String name, String value){
+    public void putHeader(String name, String value) {
         this.customHeaders.put(name, List.of(value));
     }
 
+    @Override
     public String getHeader(String name) {
-        // check the custom headers first
-        List<String> headers = customHeaders.get(name);
-
-        if (headers != null && !headers.isEmpty()){
-            return headers.get(0);
+        String header = ((HttpServletRequest) getRequest()).getHeader(name);
+        if (StringUtils.isBlank(header)) {
+            List<String> strings = customHeaders.get(name);
+            List<String> headers = strings == null || strings.isEmpty() ? List.of(EMPTY) : strings;
+            header = String.join(DELIMITER, headers);
         }
-        // else return from into the original wrapped object
-        return ((HttpServletRequest) getRequest()).getHeader(name);
+        return header;
     }
 
+    @Override
+    public Enumeration<String> getHeaders(String name) {
+        addRequestHeaders();
+        return Collections.enumeration(customHeaders.get(name));
+    }
+
+    @Override
     public Enumeration<String> getHeaderNames() {
-        // create a set of the custom header names
-        Set<String> set = new HashSet<>(customHeaders.keySet());
+        addRequestHeaders();
+        return Collections.enumeration(customHeaders.keySet());
+    }
 
-        // now add the headers from the wrapped request object
-        @SuppressWarnings("unchecked")
-        Enumeration<String> e = ((HttpServletRequest) getRequest()).getHeaderNames();
-        while (e.hasMoreElements()) {
-            // add the names of the request headers into the list
-            String n = e.nextElement();
-            set.add(n);
-        }
-
-        // create an enumeration from the set and return
-        return Collections.enumeration(set);
+    private void addRequestHeaders() {
+        HttpServletRequest request = (HttpServletRequest) getRequest();
+        Enumeration<String> requestHeaderNames = request.getHeaderNames();
+        requestHeaderNames.asIterator().forEachRemaining(s -> {
+            if (!(request.getHeader(s)).equals(customHeaders.getFirst(s))) {
+                customHeaders.add(s, request.getHeader(s));
+            }
+        });
     }
 }

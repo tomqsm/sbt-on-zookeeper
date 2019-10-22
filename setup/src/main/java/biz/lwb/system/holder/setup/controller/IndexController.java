@@ -3,9 +3,12 @@ package biz.lwb.system.holder.setup.controller;
 import biz.lwb.system.holder.inmemory.service.db.dto.MonitorDto;
 import biz.lwb.system.holder.inmemory.service.db.mapper.MonitorDao;
 import biz.lwb.system.holder.setup.avro.HttpRequestAvro;
+import biz.lwb.system.holder.setup.kafka.KafkaHttpRequestPollingConsumer;
 import biz.lwb.system.holder.setup.kafka.KafkaHttpRequestProducer;
 import biz.lwb.system.holder.setup.properties.LadProperties;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.avro.generic.GenericRecord;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -17,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @Slf4j
@@ -40,6 +45,9 @@ public class IndexController {
     @Autowired
     private KafkaHttpRequestProducer kafkaHttpRequestProducer;
 
+    @Autowired
+    private KafkaHttpRequestPollingConsumer kafkaHttpRequestPollingConsumer;
+
     @GetMapping("service.spring.injection")
     public List<MonitorDto> getServiceSpringInfoInjection(HttpServletRequest httpRequest) {
 
@@ -59,13 +67,14 @@ public class IndexController {
     }
 
     @GetMapping("kafka")
-    public HttpRequestAvro getKafka() {
+    public CompletableFuture<? extends ConsumerRecords<? super String, ? super GenericRecord>> getKafka() throws ExecutionException, InterruptedException {
         HttpRequestAvro input = HttpRequestAvro.newBuilder()
                 .setFirst("first " + System.currentTimeMillis())
                 .setSecond("second " + System.currentTimeMillis())
                 .build();
         kafkaHttpRequestProducer.sendMessage(input);
-        return input;
+
+        return kafkaHttpRequestPollingConsumer.consume().completeAsync(() -> null);
 
     }
 

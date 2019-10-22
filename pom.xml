@@ -251,9 +251,10 @@
                             <goals>
                                 <goal>schema</goal>
 <!--                                <goal>protocol</goal>-->
-<!--                                <goal>idl-protocol</goal>-->
+                                <goal>idl-protocol</goal>
                             </goals>
                             <configuration>
+                                <stringType>String</stringType>
                                 <sourceDirectory>${project.basedir}/src/main/resources/avro</sourceDirectory>
                                 <outputDirectory>${project.build.directory}/generated-sources/avro</outputDirectory>
                             </configuration>

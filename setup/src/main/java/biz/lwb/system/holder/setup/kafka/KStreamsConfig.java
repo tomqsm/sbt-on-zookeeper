@@ -1,5 +1,6 @@
 package biz.lwb.system.holder.setup.kafka;
 
+import biz.lwb.system.holder.setup.avro.HttpRequestEvent;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KeyValue;
@@ -7,12 +8,12 @@ import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.KStream;
+import org.apache.kafka.streams.kstream.KTable;
 import org.apache.kafka.streams.kstream.Produced;
 import org.apache.kafka.streams.processor.FailOnInvalidTimestamp;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.KafkaStreamsDefaultConfiguration;
 import org.springframework.kafka.config.KafkaStreamsConfiguration;
 import org.springframework.kafka.config.StreamsBuilderFactoryBean;
@@ -83,6 +84,8 @@ public class KStreamsConfig {
     public KStream<String, String> startProcessing(@Qualifier("app1StreamBuilder") StreamsBuilder builder) {
 
         KStream<String, String> kStream = builder.stream("test2", Consumed.with(Serdes.String(), Serdes.String()));
+        KTable<String, HttpRequestEvent> kStream1 = builder.table("", Consumed.with(Serdes.String(), Serdes.serdeFrom(HttpRequestEvent.class)));
+
         kStream.selectKey((key, value) -> value.split(" ")[0])
                 .filter((s, s2) -> s2 != null && contains(s2, "ERROR"))
                 .map((key, value) -> {

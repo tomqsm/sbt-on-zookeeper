@@ -1,9 +1,13 @@
 package biz.lwb.system.holder.setup.filter;
 
-import biz.lwb.system.holder.setup.kafka.LogKafkaProducer;
+import biz.lwb.system.holder.setup.avro.HttpMethod;
+import biz.lwb.system.holder.setup.avro.HttpRequestEvent;
+import biz.lwb.system.holder.setup.kafka.HttpRequestEventKafkaProducer;
 import biz.lwb.system.holder.setup.properties.CorrelationIdProperties;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -11,21 +15,24 @@ import org.springframework.web.filter.AbstractRequestLoggingFilter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.Map;
 
 @Component
 @Order(3)
-public class LogAbstractKafkaFilter extends AbstractRequestLoggingFilter {
+@Slf4j
+public class HttpRequestLoggingFilter extends AbstractRequestLoggingFilter {
 
     @Autowired
-    private LogKafkaProducer logKafkaProducer;
+    private HttpRequestEventKafkaProducer httpRequestEventKafkaProducer;
 
     @Autowired
     private CorrelationIdProperties correlationIdProperties;
 
     @Override
     protected void beforeRequest(HttpServletRequest request, String message) {
-        String headerName = correlationIdProperties.getHeaderName();
-        logKafkaProducer.sendMessage(message.concat(String.format("%s: \"%s\"", headerName,request.getHeader(headerName))));
+        log.info("request", createMessage(request, "BEGIN", "END"));
     }
 
     @Override
@@ -81,7 +88,17 @@ public class LogAbstractKafkaFilter extends AbstractRequestLoggingFilter {
         }
 
         if (isIncludeHeaders()) {
-            msg.append(";headers=").append(new ServletServerHttpRequest(request).getHeaders());
+            msg.append(";headers=").append(msg.append(";headers=").append(new ServletServerHttpRequest(request) {
+                @Override
+                public HttpHeaders getHeaders() {
+                    String headerKey = correlationIdProperties.getHeaderName();
+                    String x_correlation = getServletRequest().getHeader(headerKey);
+
+                    HttpHeaders headers = super.getHeaders();
+                    headers.put(headerKey, List.of(x_correlation));
+                    return headers;
+                }
+            }.getHeaders()));
         }
 
         if (isIncludePayload()) {
@@ -94,4 +111,11 @@ public class LogAbstractKafkaFilter extends AbstractRequestLoggingFilter {
         msg.append(suffix);
         return msg.toString();
     }
+
+    @Override
+    protected boolean isIncludeQueryString() {
+        return true;
+    }
+
+
 }

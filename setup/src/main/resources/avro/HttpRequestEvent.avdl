@@ -1,0 +1,15 @@
+@namespace("biz.lwb.system.holder.setup.avro")
+protocol HttpRequestEventProtocol {
+
+  record HttpRequestEvent {
+    string correlationId;
+    union { null, string } uri = null;
+    union { null, time_ms } timestamp;
+    @java-key-class("java.lang.String") map<@java-class("java.util.ArrayList") array<string>> headers;
+
+    HttpMethod httpMethod;
+  }
+  enum HttpMethod {
+    GET, POST, DELETE
+  }
+}

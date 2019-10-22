@@ -1,0 +1,6 @@
+{
+  "type" : "enum",
+  "name" : "HttpMethod",
+  "namespace" : "biz.lwb.system.holder.setup.avro",
+  "symbols" : [ "GET", "POST", "DELETE" ]
+}

@@ -1,0 +1,9 @@
+@namespace("biz.lwb.system.holder.setup.avro")
+protocol CarProtocol {
+
+  record Car {
+    string VIN;
+    union { null, string } plateNumber = null;
+  }
+
+}
