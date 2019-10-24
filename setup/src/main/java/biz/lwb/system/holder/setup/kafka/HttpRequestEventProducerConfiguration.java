@@ -1,6 +1,5 @@
 package biz.lwb.system.holder.setup.kafka;
 
-import biz.lwb.system.holder.setup.avro.HttpRequestAvro;
 import biz.lwb.system.holder.setup.avro.HttpRequestEvent;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import org.apache.kafka.clients.producer.ProducerConfig;

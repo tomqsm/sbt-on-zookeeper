@@ -1,6 +1,5 @@
 package biz.lwb.system.holder.setup.kafka;
 
-import biz.lwb.system.holder.setup.avro.HttpRequestAvro;
 import biz.lwb.system.holder.setup.avro.HttpRequestEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;

@@ -52,7 +52,7 @@ final class MutableHttpServletRequest extends HttpServletRequestWrapper {
         HttpServletRequest request = (HttpServletRequest) getRequest();
         Enumeration<String> requestHeaderNames = request.getHeaderNames();
         requestHeaderNames.asIterator().forEachRemaining(s -> {
-            if (!(request.getHeader(s)).equals(customHeaders.getFirst(s))) {
+            if (!StringUtils.equalsIgnoreCase(request.getHeader(s), customHeaders.getFirst(s))) {
                 customHeaders.add(s, request.getHeader(s));
             }
         });
