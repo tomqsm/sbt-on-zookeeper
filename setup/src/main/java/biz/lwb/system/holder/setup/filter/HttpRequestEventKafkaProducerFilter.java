@@ -6,7 +6,6 @@ import biz.lwb.system.holder.setup.kafka.HttpRequestEventKafkaProducer;
 import biz.lwb.system.holder.setup.properties.CorrelationIdProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -15,8 +14,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalTime;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -36,7 +36,7 @@ public class HttpRequestEventKafkaProducerFilter extends OncePerRequestFilter {
         HttpRequestEvent requestEvent = HttpRequestEvent.newBuilder()
                 .setCorrelationId(request.getHeader(correlationIdProperties.getHeaderName()))
                 .setUri(request.getRequestURI())
-                .setTimestamp(LocalTime.now())
+                .setTimestamp(System.currentTimeMillis())
                 .setHttpMethod(HttpMethod.GET)
                 .setHeaders(retrieveHeaders((MutableHttpServletRequest) request))
                 .build();

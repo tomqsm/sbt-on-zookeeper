@@ -11,7 +11,7 @@ public class KafkaHttpRequestConsumer {
 
     @KafkaListener(topics = "http-request-events", groupId = "group_id", containerFactory = "httpRequestEventKafkaContainerFactory")
     public void consume(GenericRecord message) {
-        System.out.println("httpRequestEventKafkaContainerFactory: " + message);
+        log.info("KafkaHttpRequestConsumer: {}" + message);
     }
 
 }

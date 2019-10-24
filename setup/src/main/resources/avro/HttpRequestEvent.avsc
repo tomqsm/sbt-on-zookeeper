@@ -11,10 +11,7 @@
     "default" : null
   }, {
     "name" : "timestamp",
-    "type" : [ "null", {
-      "type" : "int",
-      "logicalType" : "time-millis"
-    } ]
+    "type" : "long"
   }, {
     "name" : "headers",
     "type" : {
