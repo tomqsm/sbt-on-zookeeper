@@ -12,7 +12,7 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 @Service
 public class HttpRequestEventKafkaProducer {
 
-    public static final String TOPIC = "http-request-events";
+    public static final String TOPIC = "http-request-events-1";
 
     private final KafkaTemplate<String, HttpRequestEvent> httpRequestEventsKafkaTemplate;
 

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class KafkaHttpRequestConsumer {
 
-    @KafkaListener(topics = "http-request-events", groupId = "group_id", containerFactory = "httpRequestEventKafkaContainerFactory")
+    @KafkaListener(topics = "http-request-events-1", groupId = "group_id", containerFactory = "httpRequestEventKafkaContainerFactory")
     public void consume(GenericRecord message) {
         log.info("KafkaHttpRequestConsumer: {}" + message);
     }
