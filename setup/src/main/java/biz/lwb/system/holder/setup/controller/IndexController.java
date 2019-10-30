@@ -13,7 +13,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -36,12 +35,12 @@ public class IndexController {
     private ZookeeperServiceRegistry serviceRegistry;
 
     @GetMapping("service.spring.injection")
-    public List<MonitorDto> getServiceSpringInfoInjection(HttpServletRequest httpRequest) {
+    public List<MonitorDto> getServiceSpringInfoInjection() {
 
-        log.info("Data from database {}", environment.getProperty("springapp.spring.profiles"));
-        log.debug("Data from database {}", environment.getProperty("shared"));
-        log.error("cloud properties {}", cloudProperties);
-        log.info("instance {}", environment.getProperty("spring.cloud.zookeeper.discovery.instanceId"));
+//        log.info("Data from database {}", environment.getProperty("springapp.spring.profiles"));
+//        log.debug("Data from database {}", environment.getProperty("shared"));
+//        log.error("cloud properties {}", cloudProperties);
+//        log.info("instance {}", environment.getProperty("spring.cloud.zookeeper.discovery.instanceId"));
         return monitorDao.findAll();
 
     }

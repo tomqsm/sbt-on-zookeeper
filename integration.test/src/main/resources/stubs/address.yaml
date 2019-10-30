@@ -1,0 +1,8 @@
+!!set
+? !!biz.lwb.system.holder.dto.Address
+  apartmentNumber: '39'
+  city: Lublin
+  homeNumber: '21'
+  postalCode: 20-560
+  street: Wyżynna-Dolinna
+: null
